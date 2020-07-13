@@ -96,7 +96,7 @@ LAdir        = $(HOME)/netlib/ARCHIVES/Linux_PII
 #LAinc        = -I/home/ringbo/hpcc/fftw-2.1.5/install/include
 LAinc        = -I/home/ringbo/hpcc/fftw-3.3.8/install/include
 #LAlib        = $(LAdir)/libcblas.a -L/home/ringbo/hpcc/fftw-2.1.5/install/lib
-LAlib        = $(LAdir)/libcblas.a -lfftw3 -L/home/ringbo/hpcc/fftw-3.3.8/install/lib
+LAlib        = $(LAdir)/libcblas.a -lfftw3f -L/home/ringbo/hpcc/fftw-3.3.8/install/lib
 #
 # ----------------------------------------------------------------------
 # - F77 / C interface --------------------------------------------------

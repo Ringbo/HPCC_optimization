@@ -14,7 +14,7 @@ HPCC_fftw_create_plan(int n, fftw_direction dir, int flags) {
   fftw_complex *a = NULL, *b = NULL;
   size_t w1_size, w2_size, ww1_size, ww2_size, ww3_size, ww4_size;
 
-  p = (hpcc_fftw_plan)fftw_malloc( sizeof *p );
+  p = (hpcc_fftw_plan)fftwf_malloc( sizeof *p );
   if (! p) return p;
 
   w1_size = Mmax( FFTE_NDA2/2 + FFTE_NP, (int)(1.100 * sqrt( n )) );
@@ -24,12 +24,12 @@ HPCC_fftw_create_plan(int n, fftw_direction dir, int flags) {
   ww3_size = Mmax( FFTE_NDA2 + FFTE_NDA4*FFTE_NP + FFTE_NP, (int)(5.4773 * sqrt( n )) );
   ww4_size = Mmax( FFTE_NDA2 + (1 << 13), (int)(1.0/256.0 * n) );
 
-  p->w1 = (fftw_complex *)fftw_malloc( w1_size * (sizeof *p->w1) );
-  p->w2 = (fftw_complex *)fftw_malloc( w2_size * (sizeof *p->w2) );
-  p->ww1 = (fftw_complex *)fftw_malloc( ww1_size * (sizeof *p->ww1) );
-  p->ww2 = (fftw_complex *)fftw_malloc( ww2_size * (sizeof *p->ww1) );
-  p->ww3 = (fftw_complex *)fftw_malloc( ww3_size * (sizeof *p->ww1) );
-  p->ww4 = (fftw_complex *)fftw_malloc( ww4_size * (sizeof *p->ww1) );
+  p->w1 = (fftw_complex *)fftwf_malloc( w1_size * (sizeof *p->w1) );
+  p->w2 = (fftw_complex *)fftwf_malloc( w2_size * (sizeof *p->w2) );
+  p->ww1 = (fftw_complex *)fftwf_malloc( ww1_size * (sizeof *p->ww1) );
+  p->ww2 = (fftw_complex *)fftwf_malloc( ww2_size * (sizeof *p->ww1) );
+  p->ww3 = (fftw_complex *)fftwf_malloc( ww3_size * (sizeof *p->ww1) );
+  p->ww4 = (fftw_complex *)fftwf_malloc( ww4_size * (sizeof *p->ww1) );
 
   p->c_size = Mmax( (FFTE_NDA2+FFTE_NP) * FFTE_NBLK + FFTE_NP, (int)(16.75 * sqrt( n )) );
   p->d_size = Mmax( FFTE_NDA2+FFTE_NP, (int)(1.0 * sqrt( n )) );
@@ -40,25 +40,25 @@ HPCC_fftw_create_plan(int n, fftw_direction dir, int flags) {
     {
       int i;
       i = omp_get_num_threads();
-      p->c = (fftw_complex *)fftw_malloc( p->c_size * (sizeof *p->c) * i );
-      p->d = (fftw_complex *)fftw_malloc( p->d_size * (sizeof *p->d) * i );
+      p->c = (fftw_complex *)fftwf_malloc( p->c_size * (sizeof *p->c) * i );
+      p->d = (fftw_complex *)fftwf_malloc( p->d_size * (sizeof *p->d) * i );
     }
   }
 #else
-  p->c = (fftw_complex *)fftw_malloc( p->c_size * (sizeof *p->c) );
-  p->d = (fftw_complex *)fftw_malloc( p->d_size * (sizeof *p->d) );
+  p->c = (fftw_complex *)fftwf_malloc( p->c_size * (sizeof *p->c) );
+  p->d = (fftw_complex *)fftwf_malloc( p->d_size * (sizeof *p->d) );
 #endif
 
   if (! p->w1 || ! p->w2 || ! p->ww1 || ! p->ww2 || ! p->ww3 || ! p->ww4 || ! p->c || ! p->d) {
-    if (p->d) fftw_free( p->d );
-    if (p->c) fftw_free( p->c );
-    if (p->ww4) fftw_free( p->ww4 );
-    if (p->ww3) fftw_free( p->ww3 );
-    if (p->ww2) fftw_free( p->ww2 );
-    if (p->ww1) fftw_free( p->ww1 );
-    if (p->w2) fftw_free( p->w2 );
-    if (p->w1) fftw_free( p->w1 );
-    fftw_free( p );
+    if (p->d) fftwf_free( p->d );
+    if (p->c) fftwf_free( p->c );
+    if (p->ww4) fftwf_free( p->ww4 );
+    if (p->ww3) fftwf_free( p->ww3 );
+    if (p->ww2) fftwf_free( p->ww2 );
+    if (p->ww1) fftwf_free( p->ww1 );
+    if (p->w2) fftwf_free( p->w2 );
+    if (p->w1) fftwf_free( p->w1 );
+    fftwf_free( p );
     return NULL;
   }
 
@@ -74,15 +74,15 @@ HPCC_fftw_create_plan(int n, fftw_direction dir, int flags) {
 void
 HPCC_fftw_destroy_plan(hpcc_fftw_plan p) {
   if (! p) return;
-  fftw_free( p->d );
-  fftw_free( p->c );
-  fftw_free( p->ww4 );
-  fftw_free( p->ww3 );
-  fftw_free( p->ww2 );
-  fftw_free( p->ww1 );
-  fftw_free( p->w2 );
-  fftw_free( p->w1 );
-  fftw_free( p );
+  fftwf_free( p->d );
+  fftwf_free( p->c );
+  fftwf_free( p->ww4 );
+  fftwf_free( p->ww3 );
+  fftwf_free( p->ww2 );
+  fftwf_free( p->ww1 );
+  fftwf_free( p->w2 );
+  fftwf_free( p->w1 );
+  fftwf_free( p );
 }
 
 /* Without additional storage of size p->n there is no way to preserve FFTW 2

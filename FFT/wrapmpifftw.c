@@ -42,7 +42,7 @@ HPCC_fftw_mpi_create_plan(MPI_Comm comm, s64Int_t n, fftw_direction dir, int fla
   MPI_Comm_size( comm, &size );
   MPI_Comm_rank( comm, &rank );
 
-  p = (hpcc_fftw_mpi_plan)fftw_malloc( sizeof *p );
+  p = (hpcc_fftw_mpi_plan)fftwf_malloc( sizeof *p );
   if (! p) return p;
 
   nxyz = GetNXYZ( n, size );
@@ -73,7 +73,7 @@ HPCC_fftw_mpi_create_plan(MPI_Comm comm, s64Int_t n, fftw_direction dir, int fla
     if (p->wz) HPCC_fftw_free( p->wz );
     if (p->wy) HPCC_fftw_free( p->wy );
     if (p->wx) HPCC_fftw_free( p->wx );
-    fftw_free( p );
+    fftwf_free( p );
     return NULL;
   }
 
@@ -106,7 +106,7 @@ HPCC_fftw_mpi_destroy_plan(hpcc_fftw_mpi_plan p) {
   HPCC_fftw_free( p->wz );
   HPCC_fftw_free( p->wy );
   HPCC_fftw_free( p->wx );
-  fftw_free( p );
+  fftwf_free( p );
 }
 
 void
