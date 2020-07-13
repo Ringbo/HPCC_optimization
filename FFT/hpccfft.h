@@ -43,8 +43,9 @@ typedef long long s64Int_t;
 #include "wrapfftw.h"
 
 extern int HPCC_ipow(int x, int p);
-
+#ifndef USING_FFTW3
 extern int HPCC_zfft1d(int n, fftw_complex *a, fftw_complex *b, int iopt, hpcc_fftw_plan p);
+#endif
 extern int HPCC_fft235(fftw_complex *a, fftw_complex *b, fftw_complex *w, int n, const int *ip);
 extern int HPCC_settbl(fftw_complex *w, int n);
 extern int HPCC_factor235(int n, int *ip);

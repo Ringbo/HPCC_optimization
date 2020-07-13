@@ -102,6 +102,9 @@ MPIFFT0(HPCC_Params *params, int doIO, FILE *outFile, MPI_Comm comm, int locN,
   HPCC_bcnrand( 2 * tls, 53 * commRank * 2 * tls, inout );
   t0 += MPI_Wtime();
 
+/*
+*void fftw_mpi(fftw_mpi_plan p, int n_fields, fftw_complex *local_data, fftw_complex *work);
+*/
   t2 = -MPI_Wtime();
   fftw_mpi( p, 1, inout, work );
   t2 += MPI_Wtime();

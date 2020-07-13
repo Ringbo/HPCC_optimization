@@ -1,7 +1,12 @@
 /* -*- mode: C; tab-width: 2; indent-tabs-mode: nil; fill-column: 79; coding: iso-latin-1-unix -*- */
 /* tstfft.c
  */
-
+/*
+* ref: http://csweb.cs.wfu.edu/~torgerse/fftw_2.1.2/fftw_2.html
+* ref: http://www.fftw.org/fftw3_doc/Complex-One_002dDimensional-DFTs.html#Complex-One_002dDimensional-DFTs
+* author: Ringbo
+* date: 20-7-11
+*/
 #include <hpcc.h>
 
 #include "hpccfft.h"
@@ -59,13 +64,23 @@ TestFFT1(HPCC_Params *params, int doIO, FILE *outFile, double *UGflops, int *Un,
 #endif
 
   t1 = -MPI_Wtime();
-  p = fftw_create_plan( n, FFTW_FORWARD, flags );
+
+#ifndef USING_FFTW3
+  p = fftw_create_plan( n, FFTW_FORWARD, flags ); 
+#else
+  p = fftw_plan_dft_1d( n, in, out, FFTW_FORWARD, flags);
+#endif
+
   t1 += MPI_Wtime();
 
   if (! p) goto comp_end;
 
   t2 = -MPI_Wtime();
+#ifndef USING_FFTW3
   fftw_one( p, in, out );
+#else
+  fftw_execute( p);
+#endif
   t2 += MPI_Wtime();
 
   fftw_destroy_plan(p);

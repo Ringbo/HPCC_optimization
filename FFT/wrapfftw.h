@@ -3,6 +3,10 @@
 
 #include <fftw.h>
 
+#elif defined USING_FFTW3
+
+#include <fftw3.h>
+
 #else
 
 typedef double fftw_real;
@@ -11,11 +15,11 @@ typedef struct {
 } fftw_complex_orig;
 typedef fftw_real HPCC_Complex[2];
 typedef HPCC_Complex fftw_complex;
-
-typedef enum {
-     FFTW_FORWARD = -1, FFTW_BACKWARD = 1
-} fftw_direction;
 #endif
+typedef enum {
+     FFTW2_FORWARD = -1, FFTW2_BACKWARD = 1
+} fftw_direction;
+
 
 struct hpcc_fftw_plan_struct {
   fftw_complex *w1, *w2, *ww1, *ww2, *ww3, *ww4, *c, *d;
@@ -29,7 +33,15 @@ extern hpcc_fftw_plan HPCC_fftw_create_plan(int n, fftw_direction dir, int flags
 extern void HPCC_fftw_destroy_plan(hpcc_fftw_plan plan);
 extern void HPCC_fftw_one(hpcc_fftw_plan plan, fftw_complex *in, fftw_complex *out);
 
-#ifndef USING_FFTW
+
+#ifdef USING_FFTW
+
+#elif defined USING_FFTW3
+
+#define c_re(c)  ((c)[0])
+#define c_im(c)  ((c)[1])
+
+#else
 
 typedef struct hpcc_fftw_plan_struct *fftw_plan;
 
