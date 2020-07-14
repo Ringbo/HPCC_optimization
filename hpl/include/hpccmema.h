@@ -14,8 +14,8 @@ extern void HPCC_free(void *ptr);
 #else
 #define HPCC_malloc malloc
 #define HPCC_free free
-#define HPCC_fftw_malloc fftw_malloc
-#define HPCC_fftw_free fftw_free
+#define HPCC_fftw_malloc fftwf_malloc
+#define HPCC_fftw_free fftwf_free
 #define HPCC_XMALLOC(t,s) XMALLOC(t,s)
 #endif
 
